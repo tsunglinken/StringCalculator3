@@ -9,11 +9,9 @@ import java.util.stream.Collectors;
 
 public class ClientData {
     private String number;
-    private String delimiter;
 
     public ClientData(String number) {
         this.number = number;
-        this.delimiter = getDelimiter(",");
     }
 
     private String getDelimiter(String delimiter) {
@@ -27,12 +25,10 @@ public class ClientData {
         if(this.number.startsWith("//")) {
             Matcher matcher = Pattern.compile("//(.*)\\s(.*)").matcher(this.number);
             matcher.matches();
-            String delimiter = getDelimiter(matcher.group(1));
-            String number = matcher.group(2);
-            return transform(number.split(delimiter), Integer::parseInt);
+            return transform(matcher.group(2).split(getDelimiter(matcher.group(1))), Integer::parseInt);
         }
 
-        return transform(this.number.split(String.format(",|%n")), Integer::parseInt);
+        return transform(this.number.split(getDelimiter(",")), Integer::parseInt);
     }
 
     public List<Integer> findNegativeNumbers(List<Integer> numbers) {
